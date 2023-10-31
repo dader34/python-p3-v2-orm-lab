@@ -25,7 +25,7 @@ class Employee:
 
     @name.setter
     def name(self, name):
-        if isinstance(name, str) and len(name):
+        if isinstance(name, str) and len(name) > 0:
             self._name = name
         else:
             raise ValueError(
@@ -187,4 +187,6 @@ class Employee:
 
     def reviews(self):
         """Return list of reviews associated with current employee"""
-        pass
+        from review import Review
+        all_reviews = CURSOR.execute("SELECT * FROM reviews WHERE employee_id = ?",(self.id,)).fetchall()
+        return[Review.instance_from_db(row) for row in all_reviews]
